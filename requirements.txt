@@ -1,0 +1,9 @@
+# PyTorch CPU dal repo ufficiale
+--index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+
+# Altre librerie da PyPI
+Pillow
+numpy
+streamlit
