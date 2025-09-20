@@ -32,14 +32,15 @@ st.markdown("Carica un'immagine scura e migliorala automaticamente!")
 uploaded_file = st.file_uploader("📤 Carica un'immagine", type=["png", "jpg", "jpeg"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    original_size = image.size  # Salviamo dimensioni originali
+    full_image = Image.open(uploaded_file).convert("RGB")
+    original_size = full_image.size  # Salviamo dimensioni originali
 
-    # 🔹 Ridimensionamento sicuro se l'immagine è troppo grande
+    # 🔹 Ridimensionamento sicuro per inferenza
     max_size = 800
-    if max(image.size) > max_size:
-        image.thumbnail((max_size, max_size))
-    
+    image_for_model = full_image.copy()
+    if max(image_for_model.size) > max_size:
+        image_for_model.thumbnail((max_size, max_size))
+
     # Parametri personalizzabili
     st.sidebar.header("⚙️ Parametri di miglioramento") 
     contrast_factor = st.sidebar.slider("Contrasto", 0.5, 2.0, 1.03, 0.01)
@@ -48,12 +49,15 @@ if uploaded_file is not None:
 
     # Elaborazione con spinner
     with st.spinner("✨ Miglioramento in corso..."):
-        output_image = model.infer(
-            image,
+        output_image_small = model.infer(
+            image_for_model,
             contrast_factor=contrast_factor,
             saturation_factor=saturation_factor,
             sharpen_strength=sharpen_strength if sharpen_strength > 0 else None
         )
+
+    # 🔹 Riscalo alla dimensione originale
+    output_image = output_image_small.resize(original_size)
 
     st.success("✅ Elaborazione completata!")
 
@@ -61,7 +65,7 @@ if uploaded_file is not None:
     col1, col2 = st.columns(2)
     with col1:
         st.subheader("📷 Immagine originale")
-        st.image(image, use_container_width=True)
+        st.image(full_image, use_container_width=True)
 
     with col2:
         st.subheader("🌟 Immagine migliorata")
