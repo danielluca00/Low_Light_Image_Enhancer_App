@@ -3,7 +3,7 @@
 
 # Output images and saved models folder
 output_images/
-saved_models/
+# saved_models/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
