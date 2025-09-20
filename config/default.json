@@ -19,7 +19,7 @@
         ]
     },
     "train": {
-        "device": "cuda",
+        "device": "cpu",
         "n_epoch": 80,
         "lr": 1e-3,
         "dataset": {
@@ -44,7 +44,7 @@
         "model_name": "CDAN.pt"
     },
     "test": {
-        "device": "cuda",
+        "device": "cpu",
         "dataset": {
             "name": [
                 "data.dataset",
